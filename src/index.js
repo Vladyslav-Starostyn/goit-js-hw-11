@@ -4,6 +4,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import axios from 'axios';
 
 import { fetchImages } from './js/fetchImages';
+import { onGaleryCards } from './js/createCards';
 
 const formEl = document.getElementById('search-form');
 const inputFormEl = document.querySelector('.search-form input');
@@ -17,18 +18,35 @@ console.log(formButtonEl);
 console.log(galleryEl);
 console.log(buttonLoadMoreEl);
 
-let perPage = 40;
+const perPage = 40;
 let page = 1;
-let name = inputFormEl.value;
+let name = '';
+let totalHits = 0;
 
 buttonLoadMoreEl.style.display = 'none';
 
 formEl.addEventListener('submit', onFormSubmit);
 buttonLoadMoreEl.addEventListener('click', onBtnLoadMoreClick);
 
-function onFormSubmit() {
-  e.preventDefault();
+function onFormSubmit(event) {
+  event.preventDefault();
+  page = 1;
+  name = inputFormEl.value.trim();
   clearInputFormE();
+  buttonLoadMoreEl.style.display = 'block';
+  if (name === '') {
+    return;
+  }
+
+  fetchImages(name, page, perPage).then(({ data }) => {
+    if (data.hits.length === 0) {
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+      return;
+    }
+    galleryEl.insertAdjacentHTML('beforeend', onGaleryCards(data.hits));
+  });
 }
 
 function onBtnLoadMoreClick() {}
