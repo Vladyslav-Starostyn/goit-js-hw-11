@@ -7,7 +7,6 @@ import { onGaleryCards } from './js/createCards';
 
 const formEl = document.getElementById('search-form');
 const inputFormEl = document.querySelector('.search-form input');
-const formButtonEl = document.querySelector('.search-form button');
 const galleryEl = document.querySelector('.gallery');
 const buttonLoadMoreEl = document.querySelector('.load-more');
 
@@ -17,7 +16,6 @@ buttonLoadMoreEl.addEventListener('click', onBtnLoadMoreClick);
 const perPage = 40;
 let page = 1;
 let name = '';
-buttonLoadMoreEl.style.display = 'none';
 
 function onFormSubmit(event) {
   event.preventDefault();
@@ -47,8 +45,8 @@ function onFormSubmit(event) {
           "We're sorry, but you've reached the end of search results."
         );
       }
-
-      buttonLoadMoreEl.style.display = 'block';
+      buttonLoadMoreEl.classList.remove('is-hidden');
+      console.log(buttonLoadMoreEl);
     })
     .catch(error => console.log(error));
 }
@@ -62,7 +60,7 @@ function onBtnLoadMoreClick() {
       onSimpleLightbox();
 
       if (page > Math.floor(data.totalHits / perPage)) {
-        buttonLoadMoreEl.style.display = 'none';
+        buttonLoadMoreEl.classList.add('is-hidden');
         return Notiflix.Notify.warning(
           "We're sorry, but you've reached the end of search results."
         );
@@ -80,5 +78,5 @@ function onSimpleLightbox() {
 function clearInputFormE() {
   galleryEl.innerHTML = '';
   page = 1;
-  buttonLoadMoreEl.style.display = 'none';
+  buttonLoadMoreEl.classList.add('is-hidden');
 }
