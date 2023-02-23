@@ -38,32 +38,49 @@ function onFormSubmit(event) {
     return;
   }
 
-  fetchImages(name, page, perPage).then(({ data }) => {
-    galleryEl.insertAdjacentHTML('beforeend', onGaleryCards(data.hits));
-    if (data.hits.length === 0) {
-      Notiflix.Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-      return;
-    }
+  fetchImages(name, page, perPage)
+    .then(({ data }) => {
+      galleryEl.insertAdjacentHTML('beforeend', onGaleryCards(data.hits));
+      if (data.hits.length === 0) {
+        Notiflix.Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+        return;
+      }
 
-    Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
+      Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
 
-    new SimpleLightbox('.gallery a', {
-      captionDelay: 250,
-    }).refresh();
-  });
+      new SimpleLightbox('.gallery a', {
+        captionDelay: 250,
+      }).refresh();
+
+      if (data.totalHits < perPage) {
+        buttonLoadMoreEl.style.display = 'none';
+      }
+    })
+    .catch(error => console.log(error));
 }
 
 function onBtnLoadMoreClick() {
   page += 1;
-  fetchImages(name, page, perPage).then(({ data }) => {
-    galleryEl.insertAdjacentHTML('beforeend', onGaleryCards(data.hits));
+  fetchImages(name, page, perPage)
+    .then(({ data }) => {
+      galleryEl.insertAdjacentHTML('beforeend', onGaleryCards(data.hits));
 
-    new SimpleLightbox('.gallery a', {
-      captionDelay: 250,
-    }).refresh();
-  });
+      new SimpleLightbox('.gallery a', {
+        captionDelay: 250,
+      }).refresh();
+
+      const totalPages = Math.ceil(data.totalHits / perPage);
+
+      if (page > totalPages) {
+        buttonLoadMoreEl.style.display = 'none';
+        Notiflix.Notify.warning(
+          "We're sorry, but you've reached the end of search results."
+        );
+      }
+    })
+    .catch(error => console.log(error));
 }
 
 function clearInputFormE() {
