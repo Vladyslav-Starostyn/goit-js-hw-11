@@ -27,6 +27,8 @@ function onFormSubmit(event) {
   clearInputFormE();
   buttonLoadMoreEl.style.display = 'block';
   if (name === '') {
+    buttonLoadMoreEl.style.display = 'none';
+    Notiflix.Notify.failure('Please specify your search query.');
     return;
   }
 
