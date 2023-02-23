@@ -10,7 +10,7 @@ export function onGaleryCards(hits) {
         comments,
         downloads,
       } = hit;
-      return ` <a href = ${largeImageURL} ><div class="photo-card">
+      return ` <div class="photo-card"><a href = ${largeImageURL} >
       <img src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
       <div class="info">
         <p class="info-item"><b>Likes</b> ${likes}</p>
@@ -21,5 +21,6 @@ export function onGaleryCards(hits) {
     </div>`;
     })
     .join('');
+
   return cards;
 }

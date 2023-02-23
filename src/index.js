@@ -39,27 +39,35 @@ function onFormSubmit(event) {
   }
 
   fetchImages(name, page, perPage).then(({ data }) => {
+    galleryEl.insertAdjacentHTML('beforeend', onGaleryCards(data.hits));
     if (data.hits.length === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
       return;
     }
-    galleryEl.insertAdjacentHTML('beforeend', onGaleryCards(data.hits));
+
+    Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
+
+    new SimpleLightbox('.gallery a', {
+      captionDelay: 250,
+    }).refresh();
   });
 }
 
-function onBtnLoadMoreClick() {}
+function onBtnLoadMoreClick() {
+  page += 1;
+  fetchImages(name, page, perPage).then(({ data }) => {
+    galleryEl.insertAdjacentHTML('beforeend', onGaleryCards(data.hits));
+
+    new SimpleLightbox('.gallery a', {
+      captionDelay: 250,
+    }).refresh();
+  });
+}
 
 function clearInputFormE() {
   galleryEl.innerHTML = '';
   page = 1;
   buttonLoadMoreEl.style.display = 'none';
 }
-// fetch('https://pixabay.com/api/?key=33817651-997e7e2cbe1c3994ebc4bd75c&q=car')
-//   .then(response => response.json())
-//   .then(posts => console.log(posts))
-//   .catch(error => console.log(error));
-// axios
-//   .get('https://pixabay.com/api/?key=33817651-997e7e2cbe1c3994ebc4bd75c&q=car')
-//   .then(({ data }) => console.log(data));
