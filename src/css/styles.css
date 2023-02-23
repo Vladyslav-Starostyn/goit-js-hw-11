@@ -63,7 +63,7 @@ input {
   margin-left: 10px;
   min-width: 320px;
   border: 2px solid #f1eeee;
-  /* border-radius: 10px; */
+  border-radius: 4px;
   overflow: hidden;
   transition: all .3s;
   flex-basis: calc((100% - 10px) / 5);
