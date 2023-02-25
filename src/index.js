@@ -49,7 +49,8 @@ function onFormSubmit(event) {
       }
       buttonLoadMoreEl.classList.remove('is-hidden');
     })
-    .catch(error => console.log(error));
+    .catch(error => console.log(error))
+    .finally(() => formEl.reset());
 }
 
 function onBtnLoadMoreClick() {
