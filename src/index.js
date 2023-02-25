@@ -13,21 +13,23 @@ const buttonLoadMoreEl = document.querySelector('.load-more');
 formEl.addEventListener('submit', onFormSubmit);
 buttonLoadMoreEl.addEventListener('click', onBtnLoadMoreClick);
 
-const perPage = 40;
-let page = 1;
-let name = '';
+const options = {
+  perPage: 40,
+  page: 1,
+  name: '',
+};
 
 function onFormSubmit(event) {
   event.preventDefault();
-  page = 1;
-  name = inputFormEl.value.trim();
+  options.page = 1;
+  options.name = inputFormEl.value.trim();
   clearInputFormE();
 
-  if (name === '') {
+  if (options.name === '') {
     return Notiflix.Notify.failure('Please specify your search query.');
   }
 
-  fetchImages(name, page, perPage)
+  fetchImages(options)
     .then(({ data }) => {
       galleryEl.insertAdjacentHTML('beforeend', onGaleryCards(data.hits));
       if (data.hits.length === 0) {
@@ -40,7 +42,7 @@ function onFormSubmit(event) {
 
       onSimpleLightbox();
 
-      if (page > Math.floor(data.totalHits / perPage)) {
+      if (options.page > Math.floor(data.totalHits / options.perPage)) {
         return Notiflix.Notify.warning(
           "We're sorry, but you've reached the end of search results."
         );
@@ -51,14 +53,14 @@ function onFormSubmit(event) {
 }
 
 function onBtnLoadMoreClick() {
-  page += 1;
-  fetchImages(name, page, perPage)
+  options.page += 1;
+  fetchImages(options)
     .then(({ data }) => {
       galleryEl.insertAdjacentHTML('beforeend', onGaleryCards(data.hits));
 
       onSimpleLightbox();
 
-      if (page > Math.floor(data.totalHits / perPage)) {
+      if (options.page > Math.floor(data.totalHits / options.perPage)) {
         buttonLoadMoreEl.classList.add('is-hidden');
         return Notiflix.Notify.warning(
           "We're sorry, but you've reached the end of search results."
@@ -76,6 +78,6 @@ function onSimpleLightbox() {
 
 function clearInputFormE() {
   galleryEl.innerHTML = '';
-  page = 1;
+  options.page = 1;
   buttonLoadMoreEl.classList.add('is-hidden');
 }
