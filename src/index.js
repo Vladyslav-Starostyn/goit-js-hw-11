@@ -21,8 +21,7 @@ const options = {
 
 function onFormSubmit(event) {
   event.preventDefault();
-  options.page = 1;
-  options.name = inputFormEl.value.trim();
+  options.name = event.currentTarget.elements.searchQuery.value.trim();
   clearInputFormE();
 
   if (options.name === '') {
