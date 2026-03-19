@@ -10,7 +10,7 @@ export function onGaleryCards(hits) {
         comments,
         downloads,
       } = hit;
-      return ` <a class="gallery-item" href = ${largeImageURL} onclick="return false;>
+      return ` <a class="gallery-item" href = "${largeImageURL}" onclick="return false";>
       <div class="photo-card">
       <img class="gallery-image" src="${webformatURL}" alt="${tags}" loading="lazy" />
       <div class="info">
